@@ -1,26 +1,25 @@
 import xml.etree.ElementTree as ET
 import os, sys, subprocess
 
-#sanity check
+#sanity check on file path in args
 if len(sys.argv) < 2:
     print "[!] please feed in results.xml file from nmap scans"
     sys.exit(-1)
 
+#another sanity check on file existence
 file = sys.argv[1]
-
 if not os.path.exists(file):
     print "[!] nmap xml file doesn't exists"
     sys.exit(-1)
 
-
+#parse XML
 tree = ET.parse(file)
 root = tree.getroot()
 
 hosts={}; port_str = ''; port_list=[]
 for host in root.findall('host'):
     for ip in host.findall("./address"):
-        ip_str = ip.get('addr')
-        #hosts[ip_str] = ip_str
+        ip_str = ip.get('addr')        
     for port in host.findall("./ports/port"):
         port_str = port.get('portid')
         port_list.append(port_str)
@@ -36,7 +35,9 @@ if not len(hosts):
 cmd = 'nmap -v -O -sV -R --dns-servers 1.1.1.1 -Pn --script vuln {HOST} -p {PORTS} -oA ./deepscan/{HOST}/results --stats-every 30m'     
 original_cmd = cmd
 for host in hosts.hosts():
+    #clear screen for next scan.
     os.system("cls||clear")
+    
     #some variables to save host and ports
     ports = ','.join(map(str, hosts[host]))
     cmd = cmd.format(HOST=host, PORTS=ports)
@@ -47,11 +48,10 @@ for host in hosts.hosts():
         os.makedirs(path)
     
     #executing nmap via subprocess and print output to stdout
-    print "starting a deeper scan for: %s:%s" %host %ports
+    print "starting a deeper scan for: %s:%s" %(host, ports)
     process = subprocess.Popen(cmd, shell=True, stdout=sys.stdout); process.wait()
     print "[+] nmap finished a deep scan for %s with exit code: %i" %(host,process.returncode)
-    os.system(clear)
-    
+        
     #reset cmd for next scan
     cmd = original_cmd
 
