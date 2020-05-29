@@ -5,6 +5,13 @@ import os, sys, subprocess
 if len(sys.argv) < 2:
     print "[!] please feed in results.xml file from nmap scans"
     sys.exit(-1)
+    
+#sanity check if we have nmap on this box
+process = subprocess.Popen("nmap -V", shell=True, stdout=False, stderr=False); process.wait()
+if not process.returncode:
+    print "[!] nmap is not installed in this system. Ciao!"
+    sys.exit(-1)
+
 
 #another sanity check on file existence
 file = sys.argv[1]
