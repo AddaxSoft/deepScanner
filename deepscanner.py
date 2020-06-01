@@ -1,9 +1,14 @@
 import xml.etree.ElementTree as ET
 import os, sys, subprocess
 
+def printusage():
+    print "usage: python deepscanner.py nmap-results.xml"
+    print "if you have any questions head to https://github.com/AddaxSoft/deepScanner"
+
 #sanity check on file path in args
 if len(sys.argv) < 2:
     print "[!] please feed in results.xml file from nmap scans"
+    printusage()
     sys.exit(-1)
     
 #sanity check if we have nmap on this box
@@ -35,7 +40,7 @@ for host in root.findall('host'):
 
 #if no hosts to scan quit...
 if not len(hosts):
-    print "[+] no hosts to scan. Quiting..."
+    print "[+] no hosts to scan. Quitting..."
     sys.exit(0)
 
 #define scan type here
@@ -62,4 +67,4 @@ for host in hosts.keys():
     #reset cmd for next scan
     cmd = original_cmd
 
-print "[+] All done. Hasta la vista baby. 😘"]
+print "[+] All done. Hasta la vista baby. 😘"
