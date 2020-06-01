@@ -41,7 +41,7 @@ if not len(hosts):
 #define scan type here
 cmd = 'nmap -v -O -sV -R --dns-servers 1.1.1.1 -Pn --script vuln {HOST} -p {PORTS} -oA ./deepscan/{HOST}/results --stats-every 30m'     
 original_cmd = cmd
-for host in hosts.hosts():
+for host in hosts.keys():
     #clear screen for next scan.
     os.system("cls||clear")
     
