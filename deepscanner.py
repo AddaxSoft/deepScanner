@@ -13,8 +13,8 @@ if len(sys.argv) < 2:
     
 #sanity check if we have nmap on this box
 process = subprocess.Popen("nmap -V", shell=True, stdout=False, stderr=False); process.wait()
-if not process.returncode:
-    print "[!] nmap is not installed in this system. Ciao!"
+if process.returncode:
+    print "[!] nmap is not installed in this system. Install it first then come back. Ciao!"
     sys.exit(-1)
 
 
